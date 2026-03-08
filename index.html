@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMB-Library | Advanced Tools Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080a0f;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.3);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% -20%, #1e1b4b 0%, var(--bg-dark) 80%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            padding: 60px 20px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Search Box Design */
+        .search-container {
+            position: relative;
+            margin: 30px auto;
+            max-width: 600px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 18px 25px;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1.1rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: scale(1.02);
+        }
+
+        /* Filter Chips */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 8px 20px;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .filter-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        /* Tools Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 0 20px 60px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Glass Card Effect */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.05));
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-icon {
+            width: 64px; height: 64px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center; justify-content: center;
+            padding: 12px;
+        }
+
+        .card-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+        .card-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+        
+        .badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .btn-visit {
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-visit:hover { background: var(--primary); color: #fff; }
+
+        /* No Results State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 100px 0;
+            color: var(--text-muted);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card { animation: fadeIn 0.5s ease backwards; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="logo">AMB Library</h1>
+        <p style="color: var(--text-muted)">The ultimate curated directory for modern creators</p>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search tools, apps, or categories...">
+        </div>
+
+        <div class="categories" id="filters">
+            <button class="filter-btn active" data-filter="all">All Tools</button>
+            <button class="filter-btn" data-filter="Windows">Windows</button>
+            <button class="filter-btn" data-filter="Hardware">Hardware & System</button>
+            <button class="filter-btn" data-filter="Linux">Linux Essentials</button> 
+            <button class="filter-btn" data-filter="Development">Development</button>
+            <button class="filter-btn" data-filter="Design">Design</button>
+            <button class="filter-btn" data-filter="Browsers">Browsers</button>
+            <button class="filter-btn" data-filter="Productivity">Productivity</button>
+        </div>
+    </header>
+
+    <main class="grid-container" id="toolsGrid">
+        </main>
+
+    <script>
+        // Data Structure
+        const TOOLS_DATA = [
+            // === Hardware & System (أدوات الهاردوير ومراقبة النظام) ===
+            { name: "CPU-Z", category: "Hardware", desc: "A free utility that gathers information on some of the main devices of your system.", url: "https://www.cpuid.com/softwares/cpu-z.html", icon: "https://www.google.com/s2/favicons?domain=cpuid.com&sz=128" },
+            { name: "HWiNFO", category: "Hardware", desc: "Comprehensive hardware analysis, monitoring and reporting tool. Great for checking temperatures.", url: "https://www.hwinfo.com/", icon: "https://www.google.com/s2/favicons?domain=hwinfo.com&sz=128" },
+            { name: "MSI Afterburner", category: "Hardware", desc: "The most widely used graphics card software for monitoring performance and adjusting fan speeds.", url: "https://www.msi.com/Landing/afterburner/graphics-cards", icon: "https://www.google.com/s2/favicons?domain=msi.com&sz=128" },
+            { name: "CrystalDiskInfo", category: "Hardware", desc: "A utility software that supports S.M.A.R.T. and monitors the health and temperature of your HDD/SSD.", url: "https://crystalmark.info/en/software/crystaldiskinfo/", icon: "https://www.google.com/s2/favicons?domain=crystalmark.info&sz=128" },
+            { name: "O&O ShutUp10++", category: "Hardware", desc: "Free antispy tool for Windows to easily disable bloatware, telemetry, and control your privacy.", url: "https://www.oo-software.com/en/shutup10", icon: "https://www.google.com/s2/favicons?domain=oo-software.com&sz=128" },
+            
+            // === Windows Essentials (البرامج الأساسية للويندوز بعد التثبيت) ===
+            { name: "7-Zip", category: "Windows", desc: "A free and open-source file archiver with a high compression ratio.", url: "https://www.7-zip.org/", icon: "https://www.google.com/s2/favicons?domain=7-zip.org&sz=128" },
+            { name: "VLC Media Player", category: "Windows", desc: "Free, open-source cross-platform multimedia player that plays most multimedia files.", url: "https://www.videolan.org/", icon: "https://www.google.com/s2/favicons?domain=videolan.org&sz=128" },
+            { name: "Discord", category: "Windows", desc: "Voice, video and text chat app that's great for gamers, developers, and communities.", url: "https://discord.com/", icon: "https://www.google.com/s2/favicons?domain=discord.com&sz=128" },
+            { name: "Malwarebytes", category:"Windows", desc: "Premium Security is a user-friendly and effective antivirus solution designed to protect your devices.", url: "https://drive.google.com/file/d/1bhZ2r50E6Xpoa3gEiR0JqVZ4-HHYHkjz/view?usp=sharing", icon: "https://www.google.com/s2/favicons?domain=malwarebytes.com&sz=128" },
+            { name: "Bitwarden", category: "Windows", desc: "Highly secure, open-source password manager for all your devices.", url: "https://bitwarden.com/", icon: "https://www.google.com/s2/favicons?domain=bitwarden.com&sz=128" },
+            { name: "PowerToys", category: "Windows", desc: "Microsoft's set of utilities for power users to tune and streamline their Windows experience.", url: "https://learn.microsoft.com/en-us/windows/powertoys/", icon: "https://www.google.com/s2/favicons?domain=microsoft.com&sz=128" },
+            { name: "Rufus", category: "Windows", desc: "A small utility that helps format and create bootable USB flash drives.", url: "https://rufus.ie/", icon: "https://www.google.com/s2/favicons?domain=rufus.ie&sz=128" },
+            { name: "Spotify", category: "Windows", desc: "Digital music service that gives you access to millions of songs.", url: "https://open.spotify.com/", icon: "https://www.google.com/s2/favicons?domain=spotify.com&sz=128" },
+            { name: "Everything", category: "Windows", desc: "Locate files and folders by name instantly on Windows (Search alternative).", url: "https://www.voidtools.com/", icon: "https://www.google.com/s2/favicons?domain=voidtools.com&sz=128" },
+            { name: "ShareX", category: "Windows", desc: "Free and open-source program that lets you capture or record any area of your screen.", url: "https://getsharex.com/", icon: "https://www.google.com/s2/favicons?domain=getsharex.com&sz=128" },
+            { name: "Notepad++", category: "Windows", desc: "A free source code editor and Notepad replacement that supports several languages.", url: "https://notepad-plus-plus.org/", icon: "https://www.google.com/s2/favicons?domain=notepad-plus-plus.org&sz=128" },
+            { name: "Steam", category: "Windows", desc: "The ultimate destination for playing, discussing, and creating games.", url: "https://store.steampowered.com/", icon: "https://www.google.com/s2/favicons?domain=steampowered.com&sz=128" },
+
+            // === Linux Essentials (أدوات وبرامج لينكس الأساسية) ===
+            { name: "Flathub", category: "Linux", desc: "The home of hundreds of apps which can be easily installed on any Linux distribution.", url: "https://flathub.org/", icon: "https://www.google.com/s2/favicons?domain=flathub.org&sz=128" },
+            { name: "Wine", category: "Linux", desc: "A compatibility layer capable of running Windows applications on Linux.", url: "https://www.winehq.org/", icon: "https://www.google.com/s2/favicons?domain=winehq.org&sz=128" },
+            { name: "GIMP", category: "Linux", desc: "GNU Image Manipulation Program. A free and open-source powerful image editor.", url: "https://www.gimp.org/", icon: "https://www.google.com/s2/favicons?domain=gimp.org&sz=128" },
+            { name: "LibreOffice", category: "Linux", desc: "A powerful, free, and open-source office suite, a perfect alternative to MS Office.", url: "https://www.libreoffice.org/", icon: "https://www.google.com/s2/favicons?domain=libreoffice.org&sz=128" },
+            { name: "Vim", category: "Linux", desc: "A highly configurable text editor built to make creating and changing any kind of text very efficient.", url: "https://www.vim.org/", icon: "https://www.google.com/s2/favicons?domain=vim.org&sz=128" },
+            { name: "Htop", category: "Linux", desc: "An interactive process viewer and system monitor for Linux.", url: "https://htop.dev/", icon: "https://www.google.com/s2/favicons?domain=htop.dev&sz=128" },
+            { name: "Timeshift", category: "Linux", desc: "System restore utility that takes snapshots of the system at regular intervals.", url: "https://github.com/linuxmint/timeshift", icon: "https://www.google.com/s2/favicons?domain=linuxmint.com&sz=128" },
+            { name: "GParted", category: "Linux", desc: "A free partition manager that enables you to resize, copy, and move partitions.", url: "https://gparted.org/", icon: "https://www.google.com/s2/favicons?domain=gparted.org&sz=128" },
+            { name: "KDE Connect", category: "Linux", desc: "A project that enables all your devices to communicate with each other.", url: "https://kdeconnect.kde.org/", icon: "https://www.google.com/s2/favicons?domain=kde.org&sz=128" },
+            { name: "OBS Studio", category: "Linux", desc: "Free and open source software for video recording and live streaming.", url: "https://obsproject.com/", icon: "https://www.google.com/s2/favicons?domain=obsproject.com&sz=128" },
+            { name: "VirtualBox", category: "Linux", desc: "A powerful virtualization product for enterprise and home use.", url: "https://www.virtualbox.org/", icon: "https://www.google.com/s2/favicons?domain=virtualbox.org&sz=128" },
+            { name: "Terminator", category: "Linux", desc: "A terminal emulator that allows you to arrange terminals in a grid-like structure.", url: "https://gnome-terminator.org/", icon: "https://www.google.com/s2/favicons?domain=gnome-terminator.org&sz=128" },
+
+            // === Development (التطوير) ===
+            { name: "VS Code", category: "Development", desc: "The world's most popular code editor with endless extensibility.", url: "https://code.visualstudio.com/", icon: "https://www.google.com/s2/favicons?domain=code.visualstudio.com&sz=128" },
+            { name: "Postman", category: "Development", desc: "Comprehensive platform for API development, testing, and documentation.", url: "https://www.postman.com/", icon: "https://www.google.com/s2/favicons?domain=postman.com&sz=128" },
+            { name: "GitHub", category: "Development", desc: "Hosting service for software development and version control using Git.", url: "https://github.com/", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" },
+            { name: "Git", category: "Development", desc: "Free and open source distributed version control system.", url: "https://git-scm.com/", icon: "https://www.google.com/s2/favicons?domain=git-scm.com&sz=128" },
+            { name: "Docker", category: "Development", desc: "Platform designed to help developers build, share, and run container applications.", url: "https://www.docker.com/", icon: "https://www.google.com/s2/favicons?domain=docker.com&sz=128" },
+            { name: "Node.js", category: "Development", desc: "Cross-platform JavaScript runtime environment.", url: "https://nodejs.org/", icon: "https://www.google.com/s2/favicons?domain=nodejs.org&sz=128" },
+            { name: "Vercel", category: "Development", desc: "Platform for frontend frameworks and static sites.", url: "https://vercel.com/", icon: "https://www.google.com/s2/favicons?domain=vercel.com&sz=128" },
+            { name: "IntelliJ IDEA", category: "Development", desc: "The Leading Java and Kotlin IDE by JetBrains.", url: "https://www.jetbrains.com/idea/", icon: "https://www.google.com/s2/favicons?domain=jetbrains.com&sz=128" },
+            { name: "XAMPP", category: "Development", desc: "Completely free, easy to install Apache distribution containing MariaDB, PHP, and Perl.", url: "https://www.apachefriends.org/", icon: "https://www.google.com/s2/favicons?domain=apachefriends.org&sz=128" },
+            { name: "Stack Overflow", category: "Development", desc: "The largest online community for developers to learn and share knowledge.", url: "https://stackoverflow.com/", icon: "https://www.google.com/s2/favicons?domain=stackoverflow.com&sz=128" },
+
+            // === Design (التصميم) ===
+            { name: "Figma", category: "Design", desc: "The gold standard for collaborative interface design and prototyping.", url: "https://www.figma.com/", icon: "https://www.google.com/s2/favicons?domain=figma.com&sz=128" },
+            { name: "Canva", category: "Design", desc: "Online design and publishing tool for creating social media graphics.", url: "https://www.canva.com/", icon: "https://www.google.com/s2/favicons?domain=canva.com&sz=128" },
+            { name: "Blender", category: "Design", desc: "Free and open source 3D creation suite.", url: "https://www.blender.org/", icon: "https://www.google.com/s2/favicons?domain=blender.org&sz=128" },
+            { name: "Framer", category: "Design", desc: "Web builder for creative pros. Design and publish visually stunning sites.", url: "https://www.framer.com/", icon: "https://www.google.com/s2/favicons?domain=framer.com&sz=128" },
+            { name: "Spline", category: "Design", desc: "A free 3D design tool with real-time collaboration.", url: "https://spline.design/", icon: "https://www.google.com/s2/favicons?domain=spline.design&sz=128" },
+            { name: "Behance", category: "Design", desc: "The world's largest creative network for showcasing and discovering creative work.", url: "https://www.behance.net/", icon: "https://www.google.com/s2/favicons?domain=behance.net&sz=128" },
+            { name: "Color Hunt", category: "Design", desc: "Free and open platform for color inspiration.", url: "https://colorhunt.co/", icon: "https://www.google.com/s2/favicons?domain=colorhunt.co&sz=128" },
+            { name: "Unsplash", category: "Design", desc: "The internet's source for freely-usable images. Powered by creators everywhere.", url: "https://unsplash.com/", icon: "https://www.google.com/s2/favicons?domain=unsplash.com&sz=128" },
+
+            // === Browsers (المتصفحات) ===
+            { name: "Brave", category: "Browsers", desc: "Privacy-focused browser that blocks trackers and rewards users.", url: "https://brave.com/", icon: "https://www.google.com/s2/favicons?domain=brave.com&sz=128" },
+            { name: "Google Chrome", category: "Browsers", desc: "Fast, secure, and free web browser built for the modern web.", url: "https://www.google.com/chrome/", icon: "https://www.google.com/s2/favicons?domain=google.com&sz=128" },
+            { name: "Arc", category: "Browsers", desc: "A browser that acts like an operating system for the internet.", url: "https://arc.net/", icon: "https://www.google.com/s2/favicons?domain=arc.net&sz=128" },
+            { name: "Firefox", category: "Browsers", desc: "Open-source web browser developed by Mozilla, focusing on privacy.", url: "https://www.mozilla.org/firefox/", icon: "https://www.google.com/s2/favicons?domain=mozilla.org&sz=128" },
+            { name: "Opera GX", category: "Browsers", desc: "The browser built specifically for gamers with CPU, RAM, and Network limiters.", url: "https://www.opera.com/gx", icon: "https://www.google.com/s2/favicons?domain=opera.com&sz=128" },
+            { name: "Vivaldi", category: "Browsers", desc: "A highly customizable browser that puts you in control.", url: "https://vivaldi.com/", icon: "https://www.google.com/s2/favicons?domain=vivaldi.com&sz=128" },
+
+            // === Productivity (الإنتاجية) ===
+            { name: "Notion", category: "Productivity", desc: "The all-in-one workspace for your notes, tasks, wikis, and databases.", url: "https://www.notion.so/", icon: "https://www.google.com/s2/favicons?domain=notion.so&sz=128" },
+            { name: "Obsidian", category: "Productivity", desc: "A powerful knowledge base on top of a local folder of plain text Markdown files.", url: "https://obsidian.md/", icon: "https://www.google.com/s2/favicons?domain=obsidian.md&sz=128" },
+            { name: "Slack", category: "Productivity", desc: "Messaging app for business that connects people to the information they need.", url: "https://slack.com/", icon: "https://www.google.com/s2/favicons?domain=slack.com&sz=128" },
+            { name: "Trello", category: "Productivity", desc: "Visual tool that empowers your team to manage any type of project or workflow.", url: "https://trello.com/", icon: "https://www.google.com/s2/favicons?domain=trello.com&sz=128" },
+            { name: "Linear", category: "Productivity", desc: "A better way to build products. Issue tracking designed to be fast and beautiful.", url: "https://linear.app/", icon: "https://www.google.com/s2/favicons?domain=linear.app&sz=128" },
+            { name: "Todoist", category: "Productivity", desc: "A to-do list to organize your work and life.", url: "https://todoist.com/", icon: "https://www.google.com/s2/favicons?domain=todoist.com&sz=128" },
+            { name: "Miro", category: "Productivity", desc: "The visual collaboration platform for every team.", url: "https://miro.com/", icon: "https://www.google.com/s2/favicons?domain=miro.com&sz=128" }
+        ];        
+        
+        // Library Controller Module
+        const App = {
+            init() {
+                this.grid = document.getElementById('toolsGrid');
+                this.searchInput = document.getElementById('searchInput');
+                this.filterButtons = document.querySelectorAll('.filter-btn');
+                
+                this.addEventListeners();
+                this.render(TOOLS_DATA);
+            },
+
+            // Debounce function to optimize search performance
+            debounce(fn, delay = 300) {
+                let timeout;
+                return (...args) => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => fn.apply(this, args), delay);
+                };
+            },
+
+            addEventListeners() {
+                this.searchInput.addEventListener('input', this.debounce(() => this.handleFilter()));
+                
+                this.filterButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.filterButtons.forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.handleFilter();
+                    });
+                });
+            },
+
+            handleFilter() {
+                const query = this.searchInput.value.toLowerCase();
+                const category = document.querySelector('.filter-btn.active').dataset.filter;
+
+                const filtered = TOOLS_DATA.filter(tool => {
+                    const matchesSearch = tool.name.toLowerCase().includes(query) || 
+                                          tool.desc.toLowerCase().includes(query);
+                    const matchesCat = category === 'all' || tool.category === category;
+                    return matchesSearch && matchesCat;
+                });
+
+                this.render(filtered);
+            },
+
+            render(data) {
+                if (data.length === 0) {
+                    this.grid.innerHTML = `
+                        <div class="empty-state">
+                            <h3>No tools found</h3>
+                            <p>Try searching for something else or change the category.</p>
+                        </div>`;
+                    return;
+                }
+
+                this.grid.innerHTML = data.map((tool, index) => `
+                    <article class="card" style="animation-delay: ${index * 0.05}s">
+                        <div class="card-icon">
+                            <img src="${tool.icon}" alt="${tool.name}" loading="lazy">
+                        </div>
+                        <span class="badge">${tool.category}</span>
+                        <h3 class="card-title">${tool.name}</h3>
+                        <p class="card-desc">${tool.desc}</p>
+                        <a href="${tool.url}" target="_blank" rel="noopener" class="btn-visit">Visit Platform</a>
+                    </article>
+                `).join('');
+            }
+        };
+
+        // Boot the App
+        document.addEventListener('DOMContentLoaded', () => App.init());
+    </script>
+</body>
+</html>
